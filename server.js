@@ -1,4 +1,3 @@
-// Import Express.js
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
@@ -7,7 +6,7 @@ const app = express();
 const PORT = 3001;
 
 const uuid = require("./helpers/uuid");
-const notes = require("./db/db.json");
+const notes = require("./db/notes.json");
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -30,23 +29,25 @@ app.post("/api/notes", (req, res) => {
     const newNote = {
       title,
       text,
-      note_id: uuid(),
+      id: uuid(),
     };
 
-    const noteString = JSON.stringify(newNote);
-
-    fs.readFile("./db/db.json", "utf8", (err, data) => {
+    fs.readFile("./db/notes.json", "utf8", (err, data) => {
       const parsedNotes = JSON.parse(data);
       parsedNotes.push(newNote);
 
-      fs.writeFile("./db/db.json", JSON.stringify(parsedNotes), (writeErr) =>
+      fs.writeFile("./db/notes.json", JSON.stringify(parsedNotes), (writeErr) =>
         writeErr
           ? console.error(writeErr)
-          : console.info("Successfully updated reviews!")
+          : console.info("Successfully updated notes!")
       );
     });
-    // console.info(newNote);
-    // res.json(newNote);
+
+    const response = {
+      status: "success",
+      body: newNote,
+    };
+    res.json(response);
   }
 });
 
