@@ -58,6 +58,20 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
   const noteId = req.params.id;
+
+  fs.readFile("./db/notes.json", "utf8", (err, data) => {
+    const parsedNotes = JSON.parse(data);
+
+    filteredNotes = parsedNotes.filter((note) => note.id !== noteId);
+
+    fs.writeFile("./db/notes.json", JSON.stringify(filteredNotes), (writeErr) =>
+      writeErr
+        ? console.error(writeErr)
+        : console.info("Successfully updated notes!")
+    );
+  });
+
+  res.json({ message: "Note deleted successfully" });
 });
 
 app.listen(PORT, () =>
