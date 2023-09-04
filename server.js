@@ -1,6 +1,7 @@
 // Import Express.js
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
 const PORT = 3001;
@@ -31,6 +32,21 @@ app.post("/api/notes", (req, res) => {
       text,
       note_id: uuid(),
     };
+
+    const noteString = JSON.stringify(newNote);
+
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
+      const parsedNotes = JSON.parse(data);
+      parsedNotes.push(newNote);
+
+      fs.writeFile("./db/db.json", JSON.stringify(parsedNotes), (writeErr) =>
+        writeErr
+          ? console.error(writeErr)
+          : console.info("Successfully updated reviews!")
+      );
+    });
+    // console.info(newNote);
+    // res.json(newNote);
   }
 });
 
