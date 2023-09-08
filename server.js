@@ -74,6 +74,7 @@ app.delete("/api/notes/:id", (req, res) => {
   res.json({ message: "Note deleted successfully" });
 });
 
-app.listen(PORT, () =>
-  console.log(`Example app listening at http://localhost:${PORT}`)
-);
+// app.listen(PORT, () =>
+//   console.log(`Example app listening at http://localhost:${PORT}`)
+// );
+app.listen(process.env.PORT);
